@@ -31,9 +31,5 @@ class MainViewController: UIViewController, UITableViewDataSource {
         return cell
         
     }
-    
-
-
-
 }
 
