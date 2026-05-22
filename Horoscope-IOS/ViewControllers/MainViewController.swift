@@ -29,6 +29,15 @@ class MainViewController: UIViewController, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Horoscope Cell", for: indexPath) as! HoroscopeViewCell
         cell.render(horoscope: horoscope)
         return cell
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Show Detail" {
+            let detailViewController = segue.destination as! DetailViewController
+            let indexPath = tableView.indexPathForSelectedRow!
+            let horoscope = horoscopeList[indexPath.row]
+            detailViewController.horoscope = horoscope
+            tableView.deselectRow(at: indexPath, animated: true)
+            }
         
     }
 }
