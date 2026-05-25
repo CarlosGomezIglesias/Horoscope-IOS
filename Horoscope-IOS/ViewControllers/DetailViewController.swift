@@ -9,16 +9,27 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    @IBOutlet weak var nameDetailLabel: UILabel!
+    
+    @IBOutlet weak var dateDetailLabel: UILabel!
+    
+    @IBOutlet weak var imageDetailLabel: UIImageView!
     var horoscope: Horoscope!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         navigationItem.title = horoscope.name
+        
+        renderDetail(horoscope: horoscope)
     }
     
-
+    func renderDetail(horoscope: Horoscope){
+        nameDetailLabel.text = horoscope.name
+        dateDetailLabel.text = horoscope.dates
+        imageDetailLabel.image = horoscope.getImage()
+    }
     /*
     // MARK: - Navigation
 

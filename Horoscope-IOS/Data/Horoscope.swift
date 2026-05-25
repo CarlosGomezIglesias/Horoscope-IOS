@@ -7,23 +7,31 @@
 
 import UIKit
 
+//creamos el objeto horoscopo y sus parametros
 struct Horoscope {
     let id: String
     let name: String
     let dates: String
     
+    //creamos una funcion que sirve para poner
+    //la imagen correspondiente a cada horoscopo
     func getImage()->UIImage{
-        /*let image = UIImage(named: "horoscope-icons/\(id)-icon")
+        //esto valia para que mandara un mensaje de error
+        //indicando cual es la imagen que falta
+        /*
+         let image = UIImage(named: "horoscope-icons/\(id)-icon")
         if (image != nil) {
             return image!
         } else {
             print("Falta la imagen del horoscopo con id: \(id)")
             return UIImage(systemName: "photo.artframe")!
-        }*/
-        
+        }
+        */
+        //devuelve la imagen cuyo id corresponda al nombre de la imagen
         return UIImage(named: "horoscope-icons/\(id)-icon")!
     }
-    
+    //creamos la lista horoscope
+    //y le asignamos valores a los tres parametros del objeto
     static private let list: [Horoscope] = [
         Horoscope(id: "aries", name: "Aries", dates: "21 de marzo al 19 de abril"),
         Horoscope(id: "taurus", name: "Tauro", dates: "20 de abril al 20 de mayo"),
@@ -38,6 +46,7 @@ struct Horoscope {
         Horoscope(id: "aquarius", name: "Acuario", dates: "20 de enero al 18 de febrero"),
         Horoscope(id: "pisces", name: "Piscis", dates: "19 de febrero al 20 de marzo"),
     ]
+    //creamos funcion de obtener la lista completa de horoscopos
     static func getAll() -> [Horoscope] {
         return list
     }
