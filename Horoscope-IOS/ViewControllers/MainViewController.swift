@@ -26,6 +26,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UISearchBarDe
         navigationItem.searchController = searchController
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear (animated)
+        tableView.reloadData()
+    }
+    
     //cuantos elementos hay que listar
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return horoscopeList.count
