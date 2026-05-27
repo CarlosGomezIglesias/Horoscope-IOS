@@ -17,21 +17,28 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var favoriteMenuItem: UIBarButtonItem!
     
+    @IBOutlet weak var predictionTextView: UITextView!
+    @IBOutlet weak var loadingView: UIActivityIndicatorView!
+    
+    
     let session = SessionManager()
     
     var isFavorite = false
+    
+    var prediction: String?
     
     var horoscope: Horoscope!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         navigationItem.title = horoscope.name
         
         renderDetail(horoscope: horoscope)
         
         isFavorite = session.isFavoriteHoroscope(id: horoscope.id)
         setFavoriteIcon()
+        getPrediction(period: "daily")
     }
     
     func setFavoriteIcon(){
@@ -41,7 +48,7 @@ class DetailViewController: UIViewController {
             favoriteMenuItem.image = UIImage(systemName: "heart")
         }
     }
-
+    
     @IBAction func favoriteMenuClicked(_ sender: Any) {
         isFavorite = !isFavorite
         if (isFavorite){
@@ -52,13 +59,15 @@ class DetailViewController: UIViewController {
         setFavoriteIcon( )
     }
     @IBAction func shareMenuClicked(_ sender: Any) {
-        let text = "esto es lo que te mando"
+        if let prediction = prediction{
+            let textToShare = [ prediction ]
+            let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            
+            self.present(activityViewController, animated: true, completion: nil)
+        }
         
-        let textToShare = [ text ]
-        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view
         
-        self.present(activityViewController, animated: true, completion: nil)
     }
     
     func renderDetail(horoscope: Horoscope){
@@ -67,14 +76,29 @@ class DetailViewController: UIViewController {
         imageDetailLabel.image = horoscope.getImage()
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBAction func periodChange(_ sender: UISegmentedControl) {
+        let period = switch sender.selectedSegmentIndex {
+        case 0://daily
+            "daily"
+        case 1://weekely
+            "weekly"
+        default://monthly
+            "monthly"
+        }
+        getPrediction(period: period)
+        
     }
-    */
-
+    
+    func getPrediction(period: String){
+        self.predictionTextView.text = "Consultando con las estrellas..."
+        self.loadingView.isHidden = false
+        //crea una especie de corutina para llamar a la funcion
+        Task {
+            self.prediction = await HoroscopeApi.getPrediction(forSign: horoscope.id, withPeriod: period)
+            DispatchQueue.main.async {
+                self.predictionTextView.text = self.prediction
+                self.loadingView.isHidden = true
+            }
+        }
+    }
 }
